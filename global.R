@@ -14,24 +14,16 @@ library(shinythemes)
 library(plotly)
 library(rvest)
 library(DT)
-
-### Importation
-
-# Importation fichier csv
-data_allocine <- read_csv2("Data/data_allocine.csv")
-
-# Importation fichier excel correspondance
-correspondances <- read_excel("Data/correspondances_allocine.xlsx") %>% 
-  rename(nationalite = nationalité)
+library(janitor)
+library(fuzzyjoin)
+### Importation Ponant
+Data_Ponant <-  read_excel("//home-ens.univ-ubs.fr/e2203154/Mes documents/prog_stat/R/Ponan/Data_Ponant.xlsx",
+    range = "A1:W18"
+  ) %>%
+  janitor::clean_names()
 
 
-### Pré-traitements
-
-# Enrichir data_allocine avec les colonnes de correspondances_allocine
-data_allocine <- data_allocine %>% 
-  left_join(correspondances, by = "nationalite")
-
-### table wikipedia
+### table wikipedia extern
 # URL de la page Wikipédia
 url <- "https://fr.wikipedia.org/wiki/%C3%8Eles_du_Ponant"
 
@@ -77,8 +69,11 @@ tableau_ponant$Blason <- paste0("https:", tableau_ponant$Blason)
 
 # Convertir les liens en balises <img>
 tableau_ponant$Blason <- paste0('<img src="', tableau_ponant$Blason, '" height="40"/>')
-
-
+tableau_ponant <- tableau_ponant %>% select(Nom,Blason,'Superficie (km²)',Population,'Densité (hab./km²)', Région,Département,Coordonnées)
+data <- stringdist_left_join(Data_Ponant, tableau_ponant, 
+                                  by = c("ile" = "Nom"), 
+                                  max_dist = 2,    # distance max acceptée (ajuste selon besoin)
+                                  distance_col = "dist")
 
 
 
