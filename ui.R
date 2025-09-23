@@ -4,18 +4,21 @@ fluidPage(
   #themeSelector(), # Choix du theme (pour tester les themes)
   
   navbarPage("Application Allocine",
+             
+             
              tabPanel("Page principale",  
-                      # Logo Allociné
-                      img(src = "Allocine_Logo.svg.png", height = "58x"),
+                      # Logo Ponant
+                      img(src = "logo_ponant.png", height = "58x"),
                       
                       # Sidebar with a slider input for number of bins
                       sidebarLayout(
                         sidebarPanel(
-                          selectInput("choix_genre", "Choix du genre : ", 
-                                      choices = c("Tous les genres", unique(data_allocine$genre))),
-                          selectInput(inputId = "choix_couleur", label = "Choix de la couleur :",
-                                      choices = c("red", "blue", "green")),
-                          checkboxInput("choix_reprise","Inclure les films repris"),
+                          selectInput(inputId = "choix_indicateur", label = "Choix de l'indicateur :",
+                                      choices = c("Nombre d'habitants", "Taux de résidences secondaires", "Prix au mètre carré")),
+                          
+                          checkboxGroupInput("choix_ile", "Choix d'une ou plusieurs îles : ",  
+                                      choices = c("Toutes les îles", unique(data_Ponant$ile) %>% sort())),
+                          
                           actionButton("go","Valider")
                         ),
                         

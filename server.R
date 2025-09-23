@@ -48,7 +48,7 @@ function(input, output, session) {
   
   # Fonction observe sur déclenchement pour prévenir l'utilisateur du périmètre choisi
   observeEvent(input$go, {
-    showNotification(paste("Affichage des données sur : ", input$choix_genre))
+    showNotification(paste("Affichage des données sur : ", input$choix_indicateur))
   })
   
   

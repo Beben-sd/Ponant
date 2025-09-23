@@ -12,25 +12,18 @@ library(forcats)
 library(lubridate)
 library(shinythemes)
 library(plotly)
+library(janitor) # Nettoyer le nom des variables
 
 ### Importation
-
-# Importation fichier csv
 data_allocine <- read_csv2("Data/data_allocine.csv")
 
-# Importation fichier excel correspondance
-correspondances <- read_excel("Data/correspondances_allocine.xlsx") %>% 
-  rename(nationalite = nationalité)
+# Importation fichier excel
+data_Ponant <- read_excel("//home-ens.univ-ubs.fr/e2202958/Mes documents/M1/Data visualisation/Rshiny/Ponanttttttttttt/Ponant/Data/Data_Ponant.xlsx", 
+                          range = "A1:W18") %>% clean_names()
 
 
-### Pré-traitements
-
-# Enrichir data_allocine avec les colonnes de correspondances_allocine
-data_allocine <- data_allocine %>% 
-  left_join(correspondances, by = "nationalite")
-
-
-
+### Filtrage
+data_Ponant <- data_Ponant %>% filter(!ile %in% c("Locmaria", "Le Palais", "Sauzon", "Bangor")) # Filtrer les communes de Belle-Ile
 
 
 
