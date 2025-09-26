@@ -14,6 +14,7 @@ library(shinythemes)
 library(plotly)
 library(janitor) # Nettoyer le nom des variables
 
+
 ### Importation
 data_allocine <- read_csv2("Data/data_allocine.csv")
 

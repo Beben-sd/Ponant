@@ -36,22 +36,21 @@ function(input, output, session) {
     
   })
   
-  
-  
-  output$table_evolution <- renderTable({
-    # Tableau sur l'évolution du nombre de films par an (sur un genre donné)
-    perimetre() %>% 
-      mutate(annee_sortie = year(date_sortie)) %>% 
-      count(annee_sortie) 
+  observeEvent(input$cocher_ile, {
+    updateCheckboxGroupInput(
+      session,
+      inputId = "choix_ile",
+      selected = sort(unique(data_Ponant$ile))
+    )
   })
   
-  
-  # Fonction observe sur déclenchement pour prévenir l'utilisateur du périmètre choisi
-  observeEvent(input$go, {
-    showNotification(paste("Affichage des données sur : ", input$choix_indicateur))
+  observeEvent(input$decocher_ile, {
+    updateCheckboxGroupInput(
+      session,
+      inputId = "choix_ile",
+      selected = character(0)
+    )
   })
   
-  
-  
-  
+
 }

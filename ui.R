@@ -2,7 +2,7 @@
 fluidPage(
   theme = shinytheme("flatly"),
   #themeSelector(), # Choix du theme (pour tester les themes)
-  
+
   navbarPage("Application Allocine",
              
              
@@ -17,9 +17,15 @@ fluidPage(
                                       choices = c("Nombre d'habitants", "Taux de résidences secondaires", "Prix au mètre carré")),
                           
                           checkboxGroupInput("choix_ile", "Choix d'une ou plusieurs îles : ",  
-                                      choices = c("Toutes les îles", unique(data_Ponant$ile) %>% sort())),
+                                      choices = unique(data_Ponant$ile) %>% sort()),
+                          actionButton("cocher_ile","Cocher toutes les îles"),
+                          actionButton("decocher_ile","Décocher toutes les îles"),
+                          br(),
+                          br(),
                           
                           actionButton("go","Valider")
+                          
+
                         ),
                         
                         # Afficher le graphique d'évolution du nombre de films par an
