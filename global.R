@@ -16,11 +16,16 @@ library(rvest)
 library(DT)
 library(janitor)
 library(fuzzyjoin)
+library(stringdist)
+library(stringr)
 ### Importation Ponant
 Data_Ponant <-  read_excel("//home-ens.univ-ubs.fr/e2203154/Mes documents/prog_stat/R/Ponan/Data_Ponant.xlsx",
     range = "A1:W18"
   ) %>%
-  janitor::clean_names()
+  janitor::clean_names() 
+
+### Filtrage
+Data_Ponant <- Data_Ponant %>% filter(!ile %in% c("Locmaria", "Le Palais", "Sauzon", "Bangor")) # Filtrer les communes de Belle-Ile
 
 
 ### table wikipedia extern
@@ -70,11 +75,33 @@ tableau_ponant$Blason <- paste0("https:", tableau_ponant$Blason)
 # Convertir les liens en balises <img>
 tableau_ponant$Blason <- paste0('<img src="', tableau_ponant$Blason, '" height="40"/>')
 tableau_ponant <- tableau_ponant %>% select(Nom,Blason,'Superficie (km²)',Population,'Densité (hab./km²)', Région,Département,Coordonnées)
-data <- stringdist_left_join(Data_Ponant, tableau_ponant, 
-                                  by = c("ile" = "Nom"), 
-                                  max_dist = 2,    # distance max acceptée (ajuste selon besoin)
-                                  distance_col = "dist")
 
+
+# Remplacer manuellement les valeurs dans tableau_ponant$clean_Nom
+tableau_ponant$clean_Nom <- tableau_ponant$Nom
+
+# Remplacement des valeurs spécifiques
+tableau_ponant$clean_Nom[tableau_ponant$Nom == "île de Bréhat"] <- "Île-de-Bréhat"
+tableau_ponant$clean_Nom[tableau_ponant$Nom == "Île-de-Batz"] <- "Île-de-Batz"
+tableau_ponant$clean_Nom[tableau_ponant$Nom == "Île d'Ouessant"] <- "Ouessant"
+tableau_ponant$clean_Nom[tableau_ponant$Nom == "Île de Molène"] <- "Île-Molène"
+tableau_ponant$clean_Nom[tableau_ponant$Nom == "Île de Sein"] <- "Île-de-Sein"
+tableau_ponant$clean_Nom[tableau_ponant$Nom == "Archipel des Glénan"] <- "archipel des glénan"
+tableau_ponant$clean_Nom[tableau_ponant$Nom == "Île de Groix"] <- "Groix"
+tableau_ponant$clean_Nom[tableau_ponant$Nom == "Île d'Arz"] <- "Île-d'Arz"
+tableau_ponant$clean_Nom[tableau_ponant$Nom == "Île aux Moines"] <- "Île-aux-Moines"
+tableau_ponant$clean_Nom[tableau_ponant$Nom == "Belle-Île-en-Mer"] <- "Total Belle-île"
+tableau_ponant$clean_Nom[tableau_ponant$Nom == "Île d'Houat"] <- "Île-d'Houat"
+tableau_ponant$clean_Nom[tableau_ponant$Nom == "Île d'Hœdic"] <- "Hœdic"
+tableau_ponant$clean_Nom[tableau_ponant$Nom == "Île d'Yeu"] <- "L'Île-d'Yeu"
+tableau_ponant$clean_Nom[tableau_ponant$Nom == "Île d'Aix"] <- "Île-d'Aix"
+
+# Maintenant effectuer la jointure avec stringdist_left_join
+resultat <- left_join(
+  Data_Ponant, tableau_ponant, 
+  by = c("nom_commune" = "clean_Nom"), 
+)
+resultat %>% select(ile,Nom)
 
 
 
