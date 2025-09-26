@@ -18,6 +18,7 @@ library(janitor)
 library(fuzzyjoin)
 library(stringdist)
 library(stringr)
+library(tidyr)
 ### Importation Ponant
 data_Ponant <-  read_excel("//home-ens.univ-ubs.fr/e2203154/Mes documents/prog_stat/R/Ponan/data_Ponant.xlsx",
                            range = "A1:W18"
@@ -99,6 +100,15 @@ resultat <- left_join(
   by = c("nom_commune" = "clean_Nom"), 
 )
 
+data_longue <- resultat %>%
+  pivot_longer(
+    cols = matches("^(nb_dhabitants_|taux_de_residendes_secondaires_|prix_median_du_bati_au_m2_)"),
+    names_to = "variable_annee",
+    values_to = "valeur"
+  )
+data_long <- data_longue %>%
+  separate(variable_annee, into = c("variable", "annee"), sep = "_(?=[0-9]{4}$)") %>%
+  mutate(annee = as.integer(annee))
 
 
 tableau_propre <- resultat %>% 

@@ -5,53 +5,63 @@ function(input, output, session) {
   #EventReactive : déclenchement seulement au clic du boutton
   perimetre <- eventReactive(input$go, {
     
-    if (input$choix_genre != "Tous les genres") {
-      data_allocine_plot <- data_allocine %>% 
-        filter(genre == input$choix_genre) # Filtrer sur genre choisi par l'utilisateur 
-    }
-    
-    else {
-      data_allocine_plot <- data_allocine # Pas de filtre si "Tous les genres" choisis
-    }
-    
-    if (input$choix_reprise == FALSE) {
-      # Exclure les films repris si la boite est cochée
-      data_allocine_plot <- data_allocine_plot %>% 
-        filter(reprise != TRUE)
-    }
-    return(data_allocine_plot)
+    data_habitant_long <- data_long %>% 
+      filter(variable == input$choix_indicateur) %>% 
+      filter(ile %in% input$choix_ile)
+    return(data_habitant_long)
   })
   
   
+    # Code ici sera exécuté uniquement lorsque 'choix_indicateur' change
   output$plot_evolution <- renderPlotly({
-    # Graphique sur l'évolution du nombre de films par an (sur un genre donné)
-    (perimetre() %>% # On repart de la fonction réactive de périmètre
-       mutate(annee_sortie = year(date_sortie)) %>% 
-       count(annee_sortie) %>% 
-       ggplot() +
-       geom_line(aes(x = annee_sortie, y = n), color = input$choix_couleur) +
-       labs(title = "Evolution du nombre de films par an", subtitle = paste("Genre choisi : ", input$choix_genre))
-    )%>% 
-      ggplotly() # Conversion en graphique intéractif plotly
     
+    # Graphique sur l'évolution du nombre de films par an (sur un genre donné)
+    (perimetre() %>%  # On utilise la fonction réactive 'perimetre'
+        ggplot(aes(x = annee, y = valeur, color = ile)) +
+        geom_line(size = 1) +       # ligne pour évolution
+        geom_point(size = 2) +      # points sur chaque année
+        labs(title = paste0("Évolution ",input$choix_indicateur),  # Utilisation de 'input$choix_indicateur' pour le titre
+             x = "Année",
+             y = "Nombre d'habitants",
+             color = "Île") +
+        theme_minimal() +           # thème épuré
+        theme(
+          plot.title = element_text(hjust = 0.5, size = 16, face = "bold"),
+          axis.title = element_text(size = 12)
+        )
+    ) %>%
+      ggplotly()  # Conversion en graphique interactif
+  })
+
+  
+  observeEvent(input$cocher_ile, {
+    updateCheckboxGroupInput(
+      session,
+      inputId = "choix_ile",
+      selected = sort(unique(data_Ponant$ile))
+    )
   })
   
-  
-  
-  output$table_evolution <- renderTable({
-    # Tableau sur l'évolution du nombre de films par an (sur un genre donné)
-    perimetre() %>% 
-      mutate(annee_sortie = year(date_sortie)) %>% 
-      count(annee_sortie) 
+  observeEvent(input$decocher_ile, {
+    updateCheckboxGroupInput(
+      session,
+      inputId = "choix_ile",
+      selected = character(0)
+    )
   })
   
-  
-  # Fonction observe sur déclenchement pour prévenir l'utilisateur du périmètre choisi
-  observeEvent(input$go, {
-    showNotification(paste("Affichage des données sur : ", input$choix_genre))
+  output$table_evolution <- renderDT({
+    datatable(tableau_propre, escape = FALSE, 
+              options = list(
+                paging = TRUE,
+                searching = TRUE,
+                autoWidth = TRUE,
+                pageLength = 25,  
+                buttons = list('copy', 'csv', 'excel')  # Liste des boutons
+              ),
+              extensions = 'Buttons'  # Charge l'extension des boutons
+    )
   })
-  
-  
   
   
 }
