@@ -15,12 +15,11 @@ library(plotly)
 library(rvest)
 library(DT)
 library(janitor)
-library(fuzzyjoin)
 library(stringdist)
 library(stringr)
 library(tidyr)
 ### Importation Ponant
-data_Ponant <-  read_excel("//home-ens.univ-ubs.fr/e2203154/Mes documents/prog_stat/R/Ponan/data_Ponant.xlsx",
+data_Ponant <-  read_excel("data/data_Ponant.xlsx",
                            range = "A1:W18"
 ) %>%
   janitor::clean_names() %>% 
