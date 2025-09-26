@@ -19,14 +19,11 @@ library(fuzzyjoin)
 library(stringdist)
 library(stringr)
 ### Importation Ponant
-Data_Ponant <-  read_excel("//home-ens.univ-ubs.fr/e2203154/Mes documents/prog_stat/R/Ponan/Data_Ponant.xlsx",
-    range = "A1:W18"
-  ) %>%
-  janitor::clean_names() 
-
-### Filtrage
-Data_Ponant <- Data_Ponant %>% filter(!ile %in% c("Locmaria", "Le Palais", "Sauzon", "Bangor")) # Filtrer les communes de Belle-Ile
-
+data_Ponant <-  read_excel("//home-ens.univ-ubs.fr/e2203154/Mes documents/prog_stat/R/Ponan/data_Ponant.xlsx",
+                           range = "A1:W18"
+) %>%
+  janitor::clean_names() %>% 
+  filter(!ile %in% c("Locmaria","Le Palais","Sauzon","Bangor"))
 
 ### table wikipedia extern
 # URL de la page Wikipédia
@@ -98,10 +95,11 @@ tableau_ponant$clean_Nom[tableau_ponant$Nom == "Île d'Aix"] <- "Île-d'Aix"
 
 # Maintenant effectuer la jointure avec stringdist_left_join
 resultat <- left_join(
-  Data_Ponant, tableau_ponant, 
+  data_Ponant, tableau_ponant, 
   by = c("nom_commune" = "clean_Nom"), 
 )
-resultat %>% select(ile,Nom)
 
 
 
+tableau_propre <- resultat %>% 
+  select(nom_commune,Blason,Région,Département,Coordonnées)
