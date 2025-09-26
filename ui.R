@@ -4,32 +4,30 @@ fluidPage(
   #themeSelector(), # Choix du theme (pour tester les themes)
   
   navbarPage("Application Allocine",
-             
+             sidebarPanel(
+               # Logo Ponant
+               img(src = "logo_ponant.png", height = "90x"),
+               selectInput(inputId = "choix_indicateur", label = "Choix de l'indicateur :",
+                           choices = c("Nombre d'habitants" = "nb_dhabitants",
+                                       "Taux de résidences secondaires" = "taux_de_residendes_secondaires",
+                                       "Prix au mètre carré" = "prix_median_du_bati_au_m2" )),
+               
+               checkboxGroupInput("choix_ile", "Choix d'une ou plusieurs îles : ",  
+                                  choices = unique(data_Ponant$ile) %>% sort()),
+               actionButton("cocher_ile","Cocher toutes les îles"),
+               actionButton("decocher_ile","Décocher toutes les îles"),
+               br(),
+               br(),
+               
+               actionButton("go","Valider")
+               
+               
+             ,width = 3), 
              
              tabPanel("Page principale",  
-                      # Logo Ponant
-                      img(src = "logo_ponant.png", height = "58x"),
+                     
                       
-                      # Sidebar with a slider input for number of bins
-                      sidebarLayout(
-                        sidebarPanel(
-                          selectInput(inputId = "choix_indicateur", label = "Choix de l'indicateur :",
-                                      choices = c("Nombre d'habitants" = "nb_dhabitants",
-                                                  "Taux de résidences secondaires" = "taux_de_residendes_secondaires",
-                                                  "Prix au mètre carré" = "prix_median_du_bati_au_m2" )),
-                          
-                          checkboxGroupInput("choix_ile", "Choix d'une ou plusieurs îles : ",  
-                                             choices = unique(data_Ponant$ile) %>% sort()),
-                          actionButton("cocher_ile","Cocher toutes les îles"),
-                          actionButton("decocher_ile","Décocher toutes les îles"),
-                          br(),
-                          br(),
-                          
-                          actionButton("go","Valider")
-                          
-                          
-                        ),
-                        
+
                         # Afficher le graphique d'évolution du nombre de films par an
                         mainPanel(
                           tabsetPanel(
@@ -37,9 +35,9 @@ fluidPage(
                             tabPanel("Tableau", DTOutput("table_evolution"))
                           )
                         )
-                      )
+                      
              ),
-             tabPanel("A propos", # Page secondaire
+             tabPanel("Comparaison des ", # Page secondaire
                       "Ceci est une application d'exemple basée sur les données", strong("Allociné"))
   )
 )
