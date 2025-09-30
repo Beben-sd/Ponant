@@ -12,6 +12,12 @@ function(input, output, session) {
     )
   })
   
+  
+  maj_tableau <- eventReactive(input$go, {
+    data_filtered_tableau <- tableau_propre %>% 
+      filter(ile %in% input$choix_ile)
+  })
+  
   output$plot_evolution <- renderPlotly({
     p <- perimetre()  # récupère la liste avec data + indicateur
     data <- p$data
@@ -58,7 +64,8 @@ function(input, output, session) {
   })
   
   output$table_evolution <- renderDT({
-    datatable(tableau_propre, escape = FALSE, 
+    
+    datatable(maj_tableau(), escape = FALSE, 
               options = list(
                 paging = TRUE,
                 searching = TRUE,

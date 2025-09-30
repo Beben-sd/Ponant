@@ -3,7 +3,7 @@ fluidPage(
   theme = shinytheme("flatly"),
   #themeSelector(), # Choix du theme (pour tester les themes)
   
-  navbarPage("Application Allocine",
+  navbarPage("Application Ile Ponant",
              sidebarPanel(
                # Logo Ponant
                img(src = "logo_ponant.png", height = "90x"),
@@ -29,15 +29,14 @@ fluidPage(
                       
 
                         # Afficher le graphique d'évolution du nombre de films par an
-                        mainPanel(
-                          tabsetPanel(
-                            tabPanel("Graphique", plotlyOutput("plot_evolution",width = "100%", height = "800px")),
-                            tabPanel("Tableau", DTOutput("table_evolution"))
-                          )
-                        )
+                        mainPanel("", plotlyOutput("plot_evolution",width = "100%", height = "800px")),
+                          
+                          
+                        
                       
              ),
              tabPanel("Comparaison des ", # Page secondaire
-                      "Ceci est une application d'exemple basée sur les données", strong("Allociné"))
+                      "Ceci est une application d'exemple basée sur les données", strong("Allociné")),
+             tabPanel("Tableau des observations" , mainPanel("Tableau", DTOutput("table_evolution")))
   )
 )

@@ -111,4 +111,4 @@ data_long <- data_longue %>%
 
 
 tableau_propre <- resultat %>% 
-  select(nom_commune,Blason,Région,Département,Coordonnées)
+  select(ile,Blason,Région,Département,Coordonnées)
