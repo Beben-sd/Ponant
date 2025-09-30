@@ -111,4 +111,4 @@ data_long <- data_longue %>%
 
 
 tableau_propre <- resultat %>% 
-  select(ile,Blason,Région,Département,Coordonnées)
+  select(ile,Blason,`Superficie (km²)`,Population,`Densité (hab./km²)`,Coordonnées)

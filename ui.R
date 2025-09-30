@@ -3,7 +3,7 @@ fluidPage(
   theme = shinytheme("flatly"),
   #themeSelector(), # Choix du theme (pour tester les themes)
   
-  navbarPage("Application Ile Ponant",
+  navbarPage("Application Iles Ponant",
              sidebarPanel(
                # Logo Ponant
                img(src = "logo_ponant.png", height = "90x"),
@@ -35,8 +35,12 @@ fluidPage(
                         
                       
              ),
-             tabPanel("Comparaison des ", # Page secondaire
-                      "Ceci est une application d'exemple basée sur les données", strong("Allociné")),
-             tabPanel("Tableau des observations" , mainPanel("Tableau", DTOutput("table_evolution")))
+             tabPanel("Comparaison des Iles sur la dernière années",
+                      mainPanel("",plotlyOutput("plot_comparaison",width = "100%", height = "800px"))),
+             tabPanel("Tableau des observations" ,
+                      mainPanel("", DTOutput("table_evolution"))),
+             tabPanel("Informations complémentaires",
+                      downloadButton("telecharger_md", "Télécharger le rapport ci dessous ↓"), 
+                      includeMarkdown("a_afficher.md"))
   )
 )
