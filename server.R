@@ -11,7 +11,7 @@ function(input, output, session) {
       indicateur = input$choix_indicateur
     )
   })
-  
+   
   output$plot_evolution <- renderPlotly({
     p <- perimetre()  # récupère la liste avec data + indicateur
     data <- p$data

@@ -35,7 +35,7 @@ fluidPage(
                           tabPanel("Tableau", DTOutput("table_evolution"))
                         )
                       )
-                      
+                       
              ),
              tabPanel("Comparaison des ", # Page secondaire
                       
