@@ -19,7 +19,7 @@ library(stringdist)
 library(stringr)
 library(tidyr)
 ### Importation Ponant
-data_Ponant <-  read_excel("data/data_Ponant.xlsx",
+data_Ponant <-  read_excel("data/Data_Ponant.xlsx",
                            range = "A1:W18"
 ) %>%
   janitor::clean_names() %>% 

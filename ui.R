@@ -19,7 +19,7 @@ fluidPage(
                br(),
                br(),
                
-               actionButton("go","Valider")
+               actionButton("go"," Valider",icon = icon("check"))
                
                
              ,width = 3), 
