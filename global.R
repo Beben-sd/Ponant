@@ -2,7 +2,7 @@
 # Script à lancer au moment de l'initialisation de l'application
 
 ### Packages
- 
+
 library(shiny)
 library(readr) # Tidyverse : chargement fichiers plats
 library(dplyr) # Tidyverse : traitement de données
